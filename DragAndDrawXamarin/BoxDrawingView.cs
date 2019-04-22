@@ -18,6 +18,8 @@ namespace DragAndDrawXamarin
     public class BoxDrawingView : View
     {
         private new const string Tag = "BoxDrawingView";
+        private const string SavedInstanceStateKey = "InstanceStateKey";
+        private const string SavedBoxesKey = "SavedBoxesKey";
 
         private Box _currentBox;
         private List<Box> _boxes = new List<Box>();
@@ -89,12 +91,55 @@ namespace DragAndDrawXamarin
             }
         }
 
+        protected override IParcelable OnSaveInstanceState()
+        {
+            Bundle state = new Bundle();
+            state.PutParcelable(SavedInstanceStateKey, base.OnSaveInstanceState());
+            state.PutFloatArray(SavedBoxesKey, ConvertToArray(_boxes));
+
+            return state;
+        }
+
+        protected override void OnRestoreInstanceState(IParcelable state)
+        {
+            var restoredState = (Bundle)state;
+            base.OnRestoreInstanceState((IParcelable)restoredState.GetParcelable(SavedInstanceStateKey));
+
+            var boxCoordinates = restoredState.GetFloatArray(SavedBoxesKey);
+
+            for (int i = 0; i < boxCoordinates.Length / 4; i++)
+            {
+                var origin = new PointF(boxCoordinates[i * 4], boxCoordinates[(i * 4) + 1]);
+                var current = new PointF(boxCoordinates[(i * 4) + 2], boxCoordinates[(i * 4) + 3]);
+                var box = new Box(origin)
+                {
+                    Current = current
+                };
+                _boxes.Add(box);
+            }
+        }
+
         private void Initialize()
         {
             _boxPaint = new Paint();
             _backgroundPaint = new Paint();
             _boxPaint.Color = new Color(0x22ff0000);
             _backgroundPaint.Color = new Color(0xf8efe0);
+        }
+
+        private float[] ConvertToArray(List<Box> boxes)
+        {
+            List<float> boxCoordinates = new List<float>();
+
+            foreach (Box box in boxes)
+            {
+                boxCoordinates.Add(box.Origin.X);
+                boxCoordinates.Add(box.Origin.Y);
+                boxCoordinates.Add(box.Current.X);
+                boxCoordinates.Add(box.Current.Y);
+            }
+
+            return boxCoordinates.ToArray();
         }
     }
 }

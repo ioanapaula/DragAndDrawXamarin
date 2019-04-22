@@ -1,9 +1,10 @@
 ﻿using System;
 using Android.Graphics;
+using Java.IO;
 
 namespace DragAndDrawXamarin.Models
 {
-    public class Box
+    public class Box 
     {
         public Box(PointF origin)
         {
