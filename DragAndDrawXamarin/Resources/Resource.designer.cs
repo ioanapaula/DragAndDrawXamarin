@@ -402,6 +402,9 @@ namespace DragAndDrawXamarin
 			// aapt resource value: 0x7f010121
 			public const int bottomSheetStyle = 2130772257;
 			
+			// aapt resource value: 0x7f01015a
+			public const int box_color = 2130772314;
+			
 			// aapt resource value: 0x7f01006f
 			public const int buttonBarButtonStyle = 2130772079;
 			
@@ -5407,6 +5410,12 @@ namespace DragAndDrawXamarin
 			
 			// aapt resource value: 2
 			public const int BottomSheetBehavior_Layout_behavior_skipCollapsed = 2;
+			
+			public static int[] BoxDrawingView = new int[] {
+					2130772314};
+			
+			// aapt resource value: 0
+			public const int BoxDrawingView_box_color = 0;
 			
 			public static int[] ButtonBarLayout = new int[] {
 					2130772146};

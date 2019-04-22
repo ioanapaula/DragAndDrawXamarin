@@ -38,7 +38,7 @@ namespace DragAndDrawXamarin
 
         public BoxDrawingView(Context context, IAttributeSet attrs) : base(context, attrs)
         {
-            Initialize();
+            Initialize(attrs);
         }
 
         public override bool OnTouchEvent(MotionEvent e)
@@ -152,11 +152,22 @@ namespace DragAndDrawXamarin
             }
         }
 
-        private void Initialize()
+        private void Initialize(IAttributeSet attrs = null)
         {
             _boxPaint = new Paint();
+
+            if (attrs != null)
+            {
+                var typedArray = Context.ObtainStyledAttributes(attrs, Resource.Styleable.BoxDrawingView);
+                var boxColor = typedArray.GetColor(Resource.Styleable.BoxDrawingView_box_color, Color.Aquamarine);
+                _boxPaint.Color = boxColor;
+            }
+            else
+            {
+                _boxPaint.Color = new Color(0x22ff0000);
+            }
+
             _backgroundPaint = new Paint();
-            _boxPaint.Color = new Color(0x22ff0000);
             _backgroundPaint.Color = new Color(0xf8efe0);
         }
 
@@ -181,6 +192,7 @@ namespace DragAndDrawXamarin
             float angle2 = (float)Math.Atan2(currentPoint2.Y - currentPoint1.Y, currentPoint2.X - currentPoint1.X);
 
             float angle = ((float)Java.Lang.Math.ToDegrees(angle1 - angle2)) % 360;
+
             if (angle < -180f)
             {
                 angle += 360.0f;
